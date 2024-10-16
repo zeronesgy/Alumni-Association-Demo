@@ -10,8 +10,8 @@
     如今的gorm已经没有了Close方法，删去
     如今使用Open方法的写法：
     db, err := gorm.Open(mysql.New(mysql.Config{DriverName: driverName, DSN: args}), &gorm.Config{})
-#### gorm:
+### gorm:
     sql语句，对于type size unique等，别写错了
-#### record not found
-    log信息
+#### gorm log信息 record not found
     [0.854ms] [rows:0] SELECT * FROM `users` WHERE telephone = '12345678913' AND `users`.`deleted_at` IS NULL ORDER BY `users`.`id` LIMIT 1
+    gorm中logger.go中修改 IgnoreRecordNotFoundError: true （忽略记录未找到错误）

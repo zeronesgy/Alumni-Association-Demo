@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
+	"log"
 	"net/http"
 )
 
@@ -87,13 +88,25 @@ func Login(ctx *gin.Context) {
 	}
 
 	// 发放token
-	token := "11"
+	token, err := common.ReleaseToken(user)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"code": 500, "msg": "系统异常"})
+		log.Printf("token generate error: %v", err)
+		return
+	}
+
 	// 返回结果
+	// （第一部分加密协议）eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.（第二部分储存信息）eyJVc2VySUQiOjMsImV4cCI6MTczMDA4MzQxMSwiaWF0IjoxNzI5NDc4NjExLCJpc3MiOiJBbHVtbmktQXNzb2NpYXRpb24tRGVtbyIsInN1YiI6InVzZXIgdG9rZW4ifQ.（第三部分是前两部分加key来哈希的值）2QIq2VPA0yHmL18cfmFpSvUhCtBgl7dNLqHvnXYdrHw
 	ctx.JSON(200, gin.H{
 		"code": 200,
 		"data": gin.H{"token": token},
 		"msg":  "登陆成功",
 	})
+}
+
+func Info(ctx *gin.Context) {
+	user, _ := ctx.Get("user")
+	ctx.JSON(http.StatusOK, gin.H{"code": 200, "data": gin.H{"user": user}})
 }
 
 func isTelephoneExist(db *gorm.DB, telephone string) bool {

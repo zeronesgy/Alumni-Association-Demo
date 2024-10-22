@@ -3,6 +3,7 @@ package middleware
 import (
 	"Alumni-Association-Demo/common"
 	"Alumni-Association-Demo/model"
+	"Alumni-Association-Demo/response"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"
@@ -16,7 +17,7 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		// validate token format 若为空，或不以"Bearer "开头，说明token错误
 		if tokenString == "" || !strings.HasPrefix(tokenString, "Bearer ") {
-			ctx.JSON(http.StatusUnauthorized, gin.H{"code": 401, "message": "权限不足"})
+			response.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 			ctx.Abort()
 			return
 		}
@@ -24,7 +25,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		tokenString = tokenString[7:]
 		token, claims, err := common.ParseToken(tokenString)
 		if err != nil || !token.Valid {
-			ctx.JSON(http.StatusUnauthorized, gin.H{"code": 401, "message": "权限不足"})
+			response.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 			ctx.Abort()
 			return
 		}
@@ -37,7 +38,7 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		// 用户
 		if user.ID == 0 {
-			ctx.JSON(http.StatusUnauthorized, gin.H{"code": 401, "message": "权限不足"})
+			response.Response(ctx, http.StatusUnauthorized, 401, nil, "权限不足")
 			ctx.Abort()
 			return
 		}

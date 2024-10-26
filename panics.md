@@ -15,3 +15,9 @@
 #### gorm log信息 record not found
     [0.854ms] [rows:0] SELECT * FROM `users` WHERE telephone = '12345678913' AND `users`.`deleted_at` IS NULL ORDER BY `users`.`id` LIMIT 1
     gorm中logger.go中修改 IgnoreRecordNotFoundError: true （忽略记录未找到错误）
+
+#### yarn
+    yarn安装完后执行yarn的命令遇到问题：yarn : 无法加载文件…因为在此系统上禁止运行脚本。有关详细信息，请参阅 https:/go.microsoft.com/fwlink/?LinkID=135170 中的 about_Execution_Policies。
+    解决方法：如下
+    1.首先在windows搜索windows PowerSell，然后以管理员身份运行ISE
+    2.执行命令：set-ExecutionPolicy RemoteSigned，没有报错就说明ok了，之后就可以正常运行yarn的命令

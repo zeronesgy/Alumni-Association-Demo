@@ -16,9 +16,11 @@ import (
 func Register(ctx *gin.Context) {
 	DB := common.GetDB()
 	// 获取参数
-	name := ctx.PostForm("name")
-	telephone := ctx.PostForm("telephone")
-	password := ctx.PostForm("password")
+	var requestUser model.User
+	ctx.ShouldBind(&requestUser)
+	name := requestUser.Name
+	telephone := requestUser.Telephone
+	password := requestUser.Password
 
 	// 数据验证
 	if len(telephone) != 11 {
